@@ -25,20 +25,40 @@ class AuthController extends Controller
 
         $credential = Request(['email', 'password']);
         if(!Auth::attempt($credential)){
-            return response()->json([
-                'message' => $validForm->message,
+            return response([
+                'message' => 'email or password incorect'
             ], 422);
         }
 
-        $user = User::where(['email' => $request->email])->first();
+        $user = User::where('email', $request->email)->first();
         $token = $user->createToken('auth:sactum')->plainTextToken;
-        return response()->json([
+        $request->session()->regenerate();
+        return response([
             'message' => 'login success',
+            // 'user' => Auth::user(),
+            
             'user' => [
                 'name' => $user->name,
                 'email' => $user->email,
                 'token' => $token
             ]
-            ]);
+            ], 200);
+    }
+
+
+    public function logout(Request $request){
+
+        if(!Auth::check()){
+            return response([
+                'message' => 'unauthenticated'
+            ], 401);
+        }
+
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return response([
+            'message' => 'logout success',
+        ], 200);
     }
 }
