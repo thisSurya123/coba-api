@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Validator;
+use Response;
+use Auth;
 
 class AuthController extends Controller
 {
@@ -14,26 +17,27 @@ class AuthController extends Controller
             'password' => 'required|min:5'
         ]);
 
-        if($validform->fails()){
-            return response()->json([
+        if($validForm->fails()){
+            return response([
                 'message' => 'invalid field'
-            ]);
+            ], 422);
         }
 
-        if(!Auth::attemp($validForm)){
+        $credential = Request(['email', 'password']);
+        if(!Auth::attempt($credential)){
             return response()->json([
-                'message' => 'Email or Password is incorect',
-            ]);
+                'message' => $validForm->message,
+            ], 422);
         }
 
-        $user = Auth()->User();
+        $user = User::where(['email' => $request->email])->first();
         $token = $user->createToken('auth:sactum')->plainTextToken;
         return response()->json([
             'message' => 'login success',
             'user' => [
                 'name' => $user->name,
                 'email' => $user->email,
-                'token' => $user->token
+                'token' => $token
             ]
             ]);
     }
