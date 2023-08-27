@@ -17,9 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
-            $table->text('allowed_domain');
+            $table->text('allowed_domain')->nullable();
             $table->string('description');
             $table->boolean('limit_one_response');
+            $table->integer('creator_id');
             $table->timestamps();
         });
     }

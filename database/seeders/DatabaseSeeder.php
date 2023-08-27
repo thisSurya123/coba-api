@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\Form;
 use Hash;
 
 class DatabaseSeeder extends Seeder
@@ -37,6 +38,28 @@ class DatabaseSeeder extends Seeder
             'name' => 'User 3',
             'email' => 'user3@webtech.id',
             'password' => Hash::make('password3')
+        ]);
+
+        Form::create([
+            'name'  => 'Biodata - Web Tech Member',
+            'slug' => 'biodata',
+            'description' => 'To save Web Tech member',
+            'limit_one_response' => 1,
+            'creator_id' => 1,
+        ]);
+        Form::create([
+            'name'  => 'HTML and CSS Skills - Quiz',
+            'slug' => 'htmlcss-quiz',
+            'description' => 'Fundamental web test',
+            'limit_one_response' => 1,
+            'creator_id' => 1,
+        ]);
+        Form::create([
+            'name'  => 'Stacks of Web Tech Member',
+            'slug' => 'member-stacks',
+            'description' => 'To collect all favorite stacks',
+            'limit_one_response' => 1,
+            'creator_id' => 1,
         ]);
     }
 }

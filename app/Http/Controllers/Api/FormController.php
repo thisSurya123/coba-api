@@ -10,6 +10,31 @@ use Validator;
 
 class FormController extends Controller
 {
+
+
+    public function index(){
+
+        if(!Auth::check()){
+            return response([
+                'message' => 'unauthenticated',
+            ], 401);
+        }
+
+        $form = Form::all(['id','name','slug','description','limit_one_response','creator_id']);
+        return response([
+            'message' =>  'Get all form success',
+            'form' => [
+                $form
+                // 'id' => $form->id,
+                // 'name' => $form->name,
+                // 'slug' => $form->slug,
+                // 'description' => $form->description,
+                // 'limit_one_response' => $form->limit_one_response,
+                // 'creator_id' => $form->creator_id,
+            ],
+        ]);
+    }
+
     public function store(Request $request){
         //mengecek apakah ada user yang login
         if(!Auth::check()){
